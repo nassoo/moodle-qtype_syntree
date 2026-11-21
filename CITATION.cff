@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this software in academic work, please cite the paper below."
+title: "Syntax Tree question type for Moodle (qtype_syntree)"
+authors:
+  - family-names: Atanasov
+    given-names: Atanas
+license: GPL-3.0-or-later
+repository-code: "https://github.com/nassoo/moodle-qtype_syntree"
+url: "https://syntree.ezik.bg"
+version: "1.0"
+keywords:
+  - Moodle
+  - question type
+  - syntax tree
+  - constituency
+  - linguistics
+  - automated assessment
+preferred-citation:
+  type: conference-paper
+  authors:
+    - family-names: Atanasov
+      given-names: Atanas
+  title: "A Dual-Interface Syntax Tree Editor with Automated Assessment for Learning Management Systems"
+  collection-title: "Proceedings of the Seventh International Conference Computational Linguistics in Bulgaria (CLIB 2026)"
+  year: 2026
+  start: 173
+  end: 179
+  issn: "2367-5675"
+  publisher:
+    name: "Institute for Bulgarian Language, Bulgarian Academy of Sciences"
+    city: Sofia
+    country: BG
+  conference:
+    name: "CLIB 2026"
+    city: Sofia
+    country: BG
+  url: "https://dcl.bas.bg/clib/wp-content/uploads/2026/09/CLIB2026_20_Atanasov_173-179.pdf"

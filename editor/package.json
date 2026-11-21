@@ -1,0 +1,16 @@
+{
+  "name": "qtype-syntree-editor",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Source of the syntax tree editor used by the Moodle question type qtype_syntree",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}

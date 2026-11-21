@@ -1,0 +1,72 @@
+/**
+ * Syntax Tree Editor: styles of the Moodle build.
+ *
+ * Copyright (C) 2026 Atanas Atanasov
+ * Licensed under the GNU GPL v3 or later, with additional terms under section 7 (see NOTICE).
+ */
+/* Styles for the Moodle build only. Every rule is scoped to the editor canvas so nothing leaks into the Moodle theme. */
+
+/* Floating Action Panel (Zoom, History, Nav) */
+.syntree-canvas .fab-group {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.syntree-canvas .fab-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: rgba(52, 73, 94, 0.9);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+  padding: 0;
+}
+
+.syntree-canvas .fab-button:hover {
+  background-color: #2c3e50;
+  transform: scale(1.1);
+}
+
+.syntree-canvas .fab-button svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Compact Responsive View: Two columns for limited vertical space (Landscape Mobile) */
+@media (max-height: 500px) {
+  .syntree-canvas .fab-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    bottom: 12px;
+    right: 12px;
+    gap: 8px;
+  }
+  .syntree-canvas .fab-button {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+  .syntree-canvas .fab-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}

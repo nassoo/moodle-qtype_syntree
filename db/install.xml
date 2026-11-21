@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="question/type/syntree/db" VERSION="20260308" COMMENT="XMLDB file for Moodle qtype_syntree"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="qtype_syntree_options" COMMENT="Options for syntree questions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key to question table."/>
+        <FIELD NAME="correctanswer" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The correct syntax tree in bracket notation."/>
+        <FIELD NAME="allowtraces" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether traces are allowed."/>
+        <FIELD NAME="showfunctions" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether to show the syntactic functions list."/>
+        <FIELD NAME="functionslist" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The list of phrases and their functions configuration."/>
+        <FIELD NAME="treeweight" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="70" SEQUENCE="false" COMMENT="Percentage weight of the tree in the final grade."/>
+        <FIELD NAME="allowimport" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether students are allowed to import bracket notation."/>
+        <FIELD NAME="posweight" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="15" SEQUENCE="false" COMMENT="Percentage weight for POS accuracy."/>
+        <FIELD NAME="rootweight" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="5" SEQUENCE="false" COMMENT="Percentage weight for Root identification."/>
+        <FIELD NAME="hierarchyweight" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="80" SEQUENCE="false" COMMENT="Percentage weight for Internal Hierarchy."/>
+        <FIELD NAME="casesensitive" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether node labels are compared case-sensitively."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

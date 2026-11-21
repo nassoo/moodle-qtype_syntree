@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Guide – Moodle Teacher Mode</title>
+  <link rel="stylesheet" href="guide-style.css">
+</head>
+<body>
+<header>
+  <h1>🎓 Moodle Teacher Guide</h1>
+  <p class="subtitle">Instruction for question creators and instructors</p>
+</header>
+<div class="guide-body">
+  <div class="callout callout-moodle">
+    <span class="callout-icon">🎓</span>
+    <div>This version of the editor is integrated directly into Moodle's quiz activity for building question models and previewing assignments.</div>
+  </div>
+
+  <div class="section-title">For Teachers — Creating a Question</div>
+  <ol class="steps">
+    <li><div class="body">Add a <strong>Syntax Tree Question</strong> in your Moodle course.</div></li>
+    <li><div class="body">Build your tree using the node controls (<span class="symbol-add">↑</span> and <span class="symbol-add">↓</span>), starting from the <span class="node-symbol">?</span> node, or paste <strong>bracket notation</strong> into the top toolbar.</div></li>
+    <li><div class="body">The tree you build in the editor will be the <strong>starting state</strong> for students.</div></li>
+    <li><div class="body"><strong>Alternative Labels:</strong> Use the <code>|</code> symbol (e.g., <code>S|IP</code>) to allow multiple correct labels for a node.</div></li>
+  </ol>
+
+  <div class="section-title">Advanced Configuration</div>
+  <ul class="feature-list">
+    <li><div class="guide-icon">⚙️</div><div class="body"><strong>Checkboxes:</strong> 
+      <ul style="margin-top:4px; padding-left:16px;">
+        <li><strong>Allow Import:</strong> Lets students import their own bracket notation.</li>
+        <li><strong>Case-sensitive labels:</strong> Node labels must match in upper and lower case, so <code>vP</code> and <code>VP</code> count as different. Off by default. Syntactic functions are always compared case-insensitively.</li>
+        <li><strong>Show Functions:</strong> Activates the <strong>Syntactic Functions Window</strong> above the tree.</li>
+      </ul>
+    </div></li>
+    <li><div class="guide-icon">📊</div><div class="body"><strong>Grading Weights:</strong> Set the percentage of the grade coming from the <strong>Tree Structure</strong> (e.g., 70%). The remainder (30%) will automatically be assigned to the <strong>Functions Window</strong> scoring.</div></li>
+    <li><div class="guide-icon">📝</div><div class="body">
+      <strong>Functions List:</strong> Define the required <strong>syntactic functions</strong> using the specific format: <code>Phrase | Function=100; Alternative=50</code>
+      <div style="margin-top:4px; opacity:0.8; font-style:italic;">Example: dog | direct object=100; object=50</div>
+    </div></li>
+  </ul>
+
+    <div class="section-title">Teacher Features</div>
+    <ul class="feature-list">
+      <li><div class="guide-icon"><div class="btn-bracket-mock">Import Bracket</div></div><div class="body">Builds a visual tree from the bracket text provided in the input field.</div></li>
+      <li><div class="guide-icon"><div class="btn-bracket-mock">Export Bracket</div></div><div class="body">Copy your tree as bracket notation to your template.</div></li>
+      <li><div class="guide-icon"><div class="btn-bracket-mock" style="background: #f44336 !important; border-color: #d32f2f !important;">Clear Screen</div></div><div class="body">Resets the editor state completely for the starting condition.</div></li>
+    </ul>
+
+    <div class="section-title">Editing Features</div>
+    <ul class="feature-list">
+      <li><div class="guide-icon">✏️</div><div class="body"><strong>Rename:</strong> Double-click (or long press) any node to edit its label. For leaves, you can also edit the word.</div></li>
+      <li><div class="guide-icon symbol-add">↑</div><div class="body"><strong>Add Parent:</strong> Select a node and click the up arrow to insert a node above it.</div></li>
+      <li><div class="guide-icon symbol-add">↓</div><div class="body"><strong>Add Child:</strong> Select a node and click the down arrow to add a node below it.</div></li>
+      <li><div class="guide-icon symbol-delete">✕</div><div class="body"><strong>Delete:</strong> Click the red X to remove a node. You can choose to keep or delete its children.</div></li>
+    </ul>
+
+    <div class="section-title">Navigation & Control</div>
+    <ul class="feature-list">
+      <li><div class="guide-icon">🖐</div><div class="body"><strong>Pan/Zoom:</strong> Drag the background to move. Use buttons or <strong>pinch to zoom</strong> on touch screens.</div></li>
+      <li><div class="guide-icon">🔍</div><div class="body"><strong>Navigation Panel (Bottom-Right):</strong> 
+        <ul style="margin-top:4px; padding-left:16px;">
+          <li><span class="icon-box-svg"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle;"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg></span> / <span class="icon-box-svg"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle;"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg></span> to <strong>Undo</strong> / <strong>Redo</strong>.</li>
+          <li><span class="icon-box">+</span> / <span class="icon-box">-</span> to Zoom.</li>
+          <li><span class="icon-box">1:1</span> to Reset scale.</li>
+          <li><span class="icon-box">⌖</span> to Center (or double-click background).</li>
+        </ul>
+      </div></li>
+      <li><div class="guide-icon">⌨</div><div class="body"><strong>Shortcuts:</strong> <kbd>Ctrl</kbd> + <strong>Scroll</strong> (Zoom at cursor), <kbd>Ctrl+Z</kbd> (Undo), <kbd>Ctrl+Y</kbd> (Redo), <kbd>Ctrl+0</kbd> (Reset).</div></li>
+      <li><div class="guide-icon">↕</div><div class="body"><strong>Collapse UI:</strong> Click the <span class="icon-box">▲</span> or <span class="icon-box">▼</span> toggle in the top-right corner to hide/show toolbars for more drawing space.</div></li>
+      <li><div class="guide-icon">🔵</div><div class="body"><strong>Edge Scrolling:</strong> Drag a node to the screen edge to auto-scroll the view.</div></li>
+    </ul>
+    <div class="guide-footer">
+      <strong>Syntax Tree Editor</strong> by Atanas Atanasov &middot; &copy; 2026 &middot; GNU GPL v3 or later<br>
+      If you use it in academic work, please cite: Atanas Atanasov (2026). <em>A Dual-Interface Syntax Tree Editor with Automated Assessment for Learning Management Systems.</em> Proceedings of CLIB 2026, pp. 173&ndash;179.
+    </div>
+</div>
+</body>
+</html>

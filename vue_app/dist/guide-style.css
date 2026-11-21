@@ -1,0 +1,291 @@
+:root {
+  --guide-bg: #1a1d23;
+  --guide-surface: #21252b;
+  --guide-surface2: #2c313a;
+  --guide-border: rgba(255, 255, 255, 0.1);
+  --guide-accent: #3498db;
+  --guide-accent2: #2ecc71;
+  --guide-accent3: #f39c12;
+  --guide-accent4: #e74c3c;
+  --guide-accent5: #9b59b6;
+  --guide-text: #abb2bf;
+  --guide-text-bright: #ffffff;
+  --guide-radius: 8px;
+  --guide-fab: rgba(52, 73, 94, 0.9);
+  
+  /* Editor Button Colors */
+  --btn-import: #3498db;
+  --btn-export: #e91e63;
+  --btn-clear: #e74c3c;
+  --btn-clear: #95a5a6;
+  --btn-help: #546e7a;
+  --color-tokenize: #f1c40f;
+  --color-example: #f39c12;
+  --color-undo-redo: #95a5a6;
+}
+
+.syntree-guide-view {
+  background: var(--guide-bg) !important;
+  color: var(--guide-text) !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  line-height: 1.6 !important;
+  font-size: 15px !important;
+  text-align: left !important;
+  width: 100%;
+}
+
+.syntree-guide-view * { box-sizing: border-box !important; }
+
+/* General Resets */
+.syntree-guide-view h1, .syntree-guide-view h2, .syntree-guide-view p, 
+.syntree-guide-view ul, .syntree-guide-view li, .syntree-guide-view div {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  list-style: none;
+}
+
+.syntree-guide-view header {
+  background: var(--guide-surface) !important;
+  border-bottom: 2px solid var(--guide-border) !important;
+  padding: 30px 40px !important;
+}
+
+.syntree-guide-view header h1 {
+  font-size: 1.6rem !important;
+  color: var(--guide-text-bright) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  font-weight: 800 !important;
+}
+
+.syntree-guide-view .guide-body {
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 30px 40px 80px !important;
+}
+
+.syntree-guide-view .section-title {
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  color: var(--guide-text-bright) !important;
+  border-left: 4px solid var(--guide-accent) !important;
+  padding-left: 18px !important;
+  margin: 35px 0 15px !important;
+}
+
+.syntree-guide-view p { margin-bottom: 12px !important; display: block !important; }
+
+/* Feature / Action Row Style */
+.syntree-guide-view .feature-list > li, .syntree-guide-view .steps > li, .syntree-guide-view .btn-row {
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--guide-border) !important;
+  border-radius: var(--guide-radius) !important;
+  padding: 12px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  margin-bottom: 8px !important;
+}
+
+/* AUTHENTIC SYMBOLS (No boxes, exact colors matching editor nodes) */
+.syntree-guide-view .symbol-add { color: var(--guide-accent3) !important; font-weight: 900 !important; font-size: 1.6rem !important; }
+.syntree-guide-view .symbol-delete { color: var(--guide-accent4) !important; font-size: 1.5rem !important; font-weight: normal !important; }
+.syntree-guide-view .symbol-trace { color: var(--guide-accent5) !important; font-weight: bold !important; font-size: 1.4rem !important; }
+
+/* REAL EDITOR BUTTON STYLES FOR GUIDE */
+.syntree-guide-view .editor-btn {
+  padding: 4px 12px !important;
+  border-radius: 4px !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 70px !important;
+  text-transform: none !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+.syntree-guide-view .editor-btn-import { background-color: var(--btn-import) !important; }
+.syntree-guide-view .editor-btn-export { background-color: var(--btn-export) !important; }
+.syntree-guide-view .editor-btn-clear { background-color: var(--btn-clear) !important; }
+
+.syntree-guide-view .feature-list li .guide-icon, .syntree-guide-view .btn-icon {
+  width: auto !important;
+  min-width: 36px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.syntree-guide-view .btn-icon svg {
+  width: 28px !important;
+  height: 28px !important;
+  fill: currentColor !important;
+}
+
+.syntree-guide-view .color-tokenize { color: var(--color-tokenize) !important; }
+.syntree-guide-view .color-example { color: var(--color-example) !important; }
+.syntree-guide-view .color-clear { color: var(--btn-clear) !important; }
+.syntree-guide-view .color-export { color: var(--btn-export) !important; }
+.syntree-guide-view .color-save { color: var(--guide-accent) !important; }
+.syntree-guide-view .color-load { color: var(--guide-accent5) !important; }
+.syntree-guide-view .color-undo-redo { color: var(--color-undo-redo) !important; }
+
+/* Bracket button style - Mockup for guide */
+.syntree-guide-view .btn-bracket-mock {
+  background: #333 !important;
+  border: 1px solid #555 !important;
+  border-radius: 4px !important;
+  padding: 6px 14px !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+}
+
+/* Node Action Colors (Matching editor symbols) */
+.syntree-guide-view .text-orange { color: #e67e22 !important; }
+.syntree-guide-view .text-red { color: #e74c3c !important; }
+.syntree-guide-view .text-purple { color: #8e44ad !important; }
+.syntree-guide-view .text-blue { color: #3498db !important; }
+.syntree-guide-view .text-green { color: #2ecc71 !important; }
+
+/* Inline icons in text */
+.syntree-guide-view .inline-icon {
+  display: inline-block !important;
+  font-weight: 900 !important;
+  margin: 0 2px !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+}
+
+/* Fixed width container override for text buttons (Bracket notation) */
+.syntree-guide-view .btn-icon-text-only {
+  width: auto !important;
+  min-width: 140px !important;
+  flex-shrink: 0 !important;
+  text-align: left !important;
+}
+
+/* Sizing for double icons (Undo/Redo) */
+.syntree-guide-view .btn-icon-double {
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+  width: auto !important;
+  flex-shrink: 0 !important;
+}
+
+
+.syntree-guide-view .steps {
+  counter-reset: step !important;
+  list-style: none !important;
+}
+
+.syntree-guide-view .steps li {
+  text-align: left !important;
+}
+
+.syntree-guide-view .steps li::before {
+  content: counter(step) !important;
+  counter-increment: step !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: var(--guide-accent) !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 800 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Navigation System FAB Style */
+.syntree-guide-view .icon-box, .syntree-guide-view .icon-box-svg, .syntree-guide-view .nav-fab {
+  width: 36px !important;
+  height: 36px !important;
+  background-color: var(--guide-fab) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  margin: 0 4px !important;
+  vertical-align: middle !important;
+}
+
+.syntree-guide-view .icon-box-svg svg {
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  fill: currentColor !important;
+}
+
+.syntree-guide-view kbd {
+  background: var(--guide-surface2) !important;
+  border: 1px solid var(--guide-border) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  color: var(--guide-text-bright) !important;
+  font-family: monospace !important;
+}
+
+.syntree-guide-view .node-symbol {
+  color: var(--guide-accent4) !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: inherit !important;
+  font-weight: 900 !important;
+  font-size: 1.2rem !important;
+  display: inline !important;
+  vertical-align: baseline !important;
+  margin: 0 2px !important;
+}
+
+.syntree-guide-view table.mode-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 20px !important;
+}
+
+.syntree-guide-view table.mode-table th {
+  background: var(--guide-surface2) !important;
+  color: var(--guide-text-bright) !important;
+  padding: 10px !important;
+  text-align: left !important;
+  border-bottom: 2px solid var(--guide-border) !important;
+}
+
+.syntree-guide-view table.mode-table td {
+  padding: 10px !important;
+  border-bottom: 1px solid var(--guide-border) !important;
+}
+
+.syntree-guide-view .yes { color: var(--guide-accent2) !important; font-weight: 700 !important; }
+.syntree-guide-view .no  { color: var(--guide-accent4) !important; opacity: 0.7 !important; }
+
+@media (max-width: 600px) {
+  .syntree-guide-view .btn-row, .syntree-guide-view .feature-list > li { gap: 10px !important; padding: 10px !important; }
+}
+
+/* Author attribution (required by the additional terms in NOTICE) */
+.syntree-guide-view .guide-footer {
+  margin-top: 24px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid var(--guide-border) !important;
+  font-size: 0.85rem !important;
+  opacity: 0.85 !important;
+  line-height: 1.5 !important;
+}
