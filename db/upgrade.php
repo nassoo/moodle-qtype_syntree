@@ -24,8 +24,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Upgrade steps for the Syntax Tree question type.
+ *
+ * @param int $oldversion The version we are upgrading from.
+ * @return bool
+ */
 function xmldb_qtype_syntree_upgrade($oldversion) {
     global $DB;
 
@@ -34,7 +38,7 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
     if ($oldversion < 2026030804) {
         $table = new xmldb_table('qtype_syntree_options');
         $field = new xmldb_field('allowtraces', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'correctanswer');
-        
+
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
@@ -44,17 +48,17 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
 
     if ($oldversion < 2026030900) {
         $table = new xmldb_table('qtype_syntree_options');
-        
+
         $field1 = new xmldb_field('showfunctions', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'allowtraces');
         if (!$dbman->field_exists($table, $field1)) {
             $dbman->add_field($table, $field1);
         }
-        
+
         $field2 = new xmldb_field('functionslist', XMLDB_TYPE_TEXT, null, null, null, null, null, 'showfunctions');
         if (!$dbman->field_exists($table, $field2)) {
             $dbman->add_field($table, $field2);
         }
-        
+
         $field3 = new xmldb_field('treeweight', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '70', 'functionslist');
         if (!$dbman->field_exists($table, $field3)) {
             $dbman->add_field($table, $field3);
@@ -66,7 +70,7 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
     if ($oldversion < 2026030901) {
         $table = new xmldb_table('qtype_syntree_options');
         $field = new xmldb_field('allowimport', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'treeweight');
-        
+
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
@@ -75,17 +79,17 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
     }
     if ($oldversion < 2026060400) {
         $table = new xmldb_table('qtype_syntree_options');
-        
+
         $field1 = new xmldb_field('showfunctions', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'allowtraces');
         if (!$dbman->field_exists($table, $field1)) {
             $dbman->add_field($table, $field1);
         }
-        
+
         $field2 = new xmldb_field('functionslist', XMLDB_TYPE_TEXT, null, null, null, null, null, 'showfunctions');
         if (!$dbman->field_exists($table, $field2)) {
             $dbman->add_field($table, $field2);
         }
-        
+
         $field3 = new xmldb_field('treeweight', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '70', 'functionslist');
         if (!$dbman->field_exists($table, $field3)) {
             $dbman->add_field($table, $field3);
@@ -101,17 +105,17 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
 
     if ($oldversion < 2026071900) {
         $table = new xmldb_table('qtype_syntree_options');
-        
+
         $field5 = new xmldb_field('posweight', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '15', 'allowimport');
         if (!$dbman->field_exists($table, $field5)) {
             $dbman->add_field($table, $field5);
         }
-        
+
         $field6 = new xmldb_field('rootweight', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '5', 'posweight');
         if (!$dbman->field_exists($table, $field6)) {
             $dbman->add_field($table, $field6);
         }
-        
+
         $field7 = new xmldb_field('hierarchyweight', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '80', 'rootweight');
         if (!$dbman->field_exists($table, $field7)) {
             $dbman->add_field($table, $field7);
@@ -131,6 +135,6 @@ function xmldb_qtype_syntree_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026111900, 'qtype', 'syntree');
     }
 
-    // Without this Moodle treats the upgrade as failed whenever the version is bumped without a new savepoint
+    // Without this Moodle treats the upgrade as failed whenever the version is bumped without a new savepoint.
     return true;
 }

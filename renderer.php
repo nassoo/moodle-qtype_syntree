@@ -32,45 +32,53 @@ require_once($CFG->dirroot . '/question/type/rendererbase.php');
  * Renderer for Syntax Tree questions.
  */
 class qtype_syntree_renderer extends qtype_renderer {
-
+    /**
+     * Render the question text, student tree editor, and syntactic functions inputs.
+     *
+     * @param question_attempt $qa The question attempt to display.
+     * @param question_display_options $options Display options.
+     * @return string HTML output.
+     */
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
-        global $PAGE;
-
         $question = $qa->get_question();
         $response = $qa->get_last_qt_var('answer', '');
 
         $inputname = $qa->get_qt_field_name('answer');
-        $containerId = 'syntree-student-editor-' . $inputname;
+        $containerid = 'syntree-student-editor-' . $inputname;
         $allowimport = !empty($question->allowimport);
 
         $html = '';
-        $html .= html_writer::tag('div', $question->format_questiontext($qa), array('class' => 'qtext'));
+        $html .= html_writer::tag('div', $question->format_questiontext($qa), ['class' => 'qtext']);
 
-        // --- 1. STUDENT EDITOR ---
+        // 1. Student editor.
         // Traces are not saved in the answer and not graded yet, so they are always off.
-        $html .= html_writer::start_tag('div', array(
-            'id' => $containerId,
-            'style' => 'width:100%; min-height:500px; border:1px solid #ccc; margin-top:20px; background:#fafafa; position:relative;',
+        $html .= html_writer::start_tag('div', [
+            'id' => $containerid,
+            'style' => 'width:100%; min-height:500px; border:1px solid #ccc; margin-top:20px; ' .
+                'background:#fafafa; position:relative;',
             'data-allowimport' => (int)$allowimport,
             'data-allowtraces' => 0,
-            'data-mode' => 'student'
-        ));
+            'data-mode' => 'student',
+        ]);
         $html .= html_writer::end_tag('div');
 
-        // html_writer escapes attribute values itself, so the raw value goes in.
-        $hidden_id = 'id_' . $inputname;
-        $html .= html_writer::empty_tag('input', array(
+        // Output via html_writer so attribute values are escaped automatically.
+        $hiddenid = 'id_' . $inputname;
+        $html .= html_writer::empty_tag('input', [
             'type' => 'hidden',
             'name' => $inputname,
-            'id'   => $hidden_id,
-            'value' => $response
-        ));
+            'id'   => $hiddenid,
+            'value' => $response,
+        ]);
 
-        // --- 2. SYNTACTIC FUNCTIONS TABLE ---
+        // 2. Syntactic functions table.
         if ($question->showfunctions) {
-            $html .= html_writer::start_tag('div', array('class' => 'syntree-functions-container', 'style' => 'margin-top:20px; margin-bottom: 20px;'));
+            $html .= html_writer::start_tag(
+                'div',
+                ['class' => 'syntree-functions-container', 'style' => 'margin-top:20px; margin-bottom: 20px;']
+            );
 
-            $html .= html_writer::start_tag('table', array('class' => 'generaltable', 'style' => 'width:100%; max-width: 600px;'));
+            $html .= html_writer::start_tag('table', ['class' => 'generaltable', 'style' => 'width:100%; max-width: 600px;']);
             $html .= html_writer::start_tag('thead');
             $html .= html_writer::start_tag('tr');
             $html .= html_writer::tag('th', get_string('phrase_word', 'qtype_syntree'));
@@ -82,18 +90,20 @@ class qtype_syntree_renderer extends qtype_renderer {
             $idx = 0;
             foreach (explode("\n", (string)$question->functionslist) as $line) {
                 $line = trim($line);
-                if ($line === '') continue;
+                if ($line === '') {
+                    continue;
+                }
 
                 $parts = explode('|', $line);
                 $phrase = trim($parts[0]);
 
-                $attributes = array(
+                $attributes = [
                     'type' => 'text',
                     'name' => $qa->get_qt_field_name('func_' . $idx),
                     'value' => $qa->get_last_qt_var('func_' . $idx, ''),
                     'class' => 'form-control',
-                    'style' => 'width:100%'
-                );
+                    'style' => 'width:100%',
+                ];
                 if ($options->readonly) {
                     $attributes['readonly'] = 'readonly';
                 }
@@ -109,29 +119,29 @@ class qtype_syntree_renderer extends qtype_renderer {
             $html .= html_writer::end_tag('div');
         }
 
-        // Load JS Bundle
-        $initial_data = $response;
+        // Load JS bundle.
+        $initialdata = $response;
 
-        // Extract only the leaf symbols (words) from the correct bracket notation
-        if (empty($initial_data)) {
-            $correct_answer = isset($question->correctanswer) ? $question->correctanswer : '';
-            if (preg_match_all('/\[\S+\s+([^\[\]]+)\]/', $correct_answer, $matches)) {
-                $initial_data = implode('|', array_map('trim', $matches[1]));
+        // Extract only the leaf symbols (words) from the correct bracket notation.
+        if (empty($initialdata)) {
+            $correctanswer = isset($question->correctanswer) ? $question->correctanswer : '';
+            if (preg_match_all('/\[\S+\s+([^\[\]]+)\]/', $correctanswer, $matches)) {
+                $initialdata = implode('|', array_map('trim', $matches[1]));
             } else {
-                $initial_data = ""; // Fallback
+                $initialdata = ""; // Fallback.
             }
         }
 
-        $PAGE->requires->strings_for_js(qtype_syntree::JS_STRINGS, 'qtype_syntree');
-        $PAGE->requires->js_call_amd('qtype_syntree/editor_core', 'init', [[
+        $this->page->requires->strings_for_js(qtype_syntree::JS_STRINGS, 'qtype_syntree');
+        $this->page->requires->js_call_amd('qtype_syntree/editor_core', 'init', [[
             'bundleUrl'   => qtype_syntree::get_bundle_url(),
-            'containerId' => $containerId,
-            'inputId'     => $hidden_id,
+            'containerId' => $containerid,
+            'inputId'     => $hiddenid,
             'mode'        => 'student',
-            'initialData' => $initial_data,
+            'initialData' => $initialdata,
             'readonly'    => $options->readonly,
             'allowtraces' => false,
-            'allowimport' => $allowimport
+            'allowimport' => $allowimport,
         ]]);
 
         return $html;
@@ -140,6 +150,9 @@ class qtype_syntree_renderer extends qtype_renderer {
     /**
      * The grading breakdown belongs to the student's own answer, so it is shown as specific feedback only.
      * General feedback is printed separately by the question engine.
+     *
+     * @param question_attempt $qa The question attempt being reviewed.
+     * @return string HTML output.
      */
     public function specific_feedback(question_attempt $qa) {
         $question = $qa->get_question();
@@ -152,52 +165,73 @@ class qtype_syntree_renderer extends qtype_renderer {
 
         $breakdown = $question->get_grading_breakdown($response);
 
-        $html = html_writer::start_tag('div', array('class' => 'syntree-grading-breakdown', 'style' => 'margin-top:20px; border:1px solid #ccc; padding:15px; border-radius:5px; background-color:#f9f9f9;'));
-        $html .= html_writer::tag('h3', get_string('grading_details', 'qtype_syntree'), array('style' => 'margin-top:0;'));
+        $html = html_writer::start_tag('div', [
+            'class' => 'syntree-grading-breakdown',
+            'style' => 'margin-top:20px; border:1px solid #ccc; padding:15px; border-radius:5px; background-color:#f9f9f9;',
+        ]);
+        $html .= html_writer::tag('h3', get_string('grading_details', 'qtype_syntree'), ['style' => 'margin-top:0;']);
 
-        // --- TREE SCORE ---
-        $tree_score = round($breakdown['tree_score'] * 100, 1);
-        $tree_class = ($tree_score >= 99) ? 'text-success' : (($tree_score > 0) ? 'text-warning' : 'text-danger');
+        // Tree score.
+        $treescore = round($breakdown['tree_score'] * 100, 1);
+        $treeclass = ($treescore >= 99) ? 'text-success' : (($treescore > 0) ? 'text-warning' : 'text-danger');
 
-        $html .= html_writer::start_tag('div', array('style' => 'margin-bottom:10px;'));
+        $html .= html_writer::start_tag('div', ['style' => 'margin-bottom:10px;']);
         $html .= html_writer::tag('strong', get_string('tree_score', 'qtype_syntree') . ": ");
-        $html .= html_writer::tag('span', $tree_score . '%', array('class' => $tree_class, 'style' => 'font-weight:bold;'));
+        $html .= html_writer::tag('span', $treescore . '%', ['class' => $treeclass, 'style' => 'font-weight:bold;']);
         if ($question->showfunctions) {
             $html .= ' (' . get_string('treeweight', 'qtype_syntree') . ': ' . $breakdown['tree_weight'] . '%)';
         }
         $html .= html_writer::end_tag('div');
 
-        // --- DETAILED IRLA BREAKDOWN ---
-        $html .= html_writer::start_tag('div', array('style' => 'font-size: 0.9em; color: #666; margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 4px; border: 1px inset #eee;'));
-        $html .= html_writer::tag('div', html_writer::tag('strong', get_string('pos_score', 'qtype_syntree', $breakdown['posweight']) . ':') . ' ' . round($breakdown['pos_score'] * 100, 1) . '%');
-        $html .= html_writer::tag('div', html_writer::tag('strong', get_string('root_score', 'qtype_syntree', $breakdown['rootweight']) . ':') . ' ' . round($breakdown['root_score'] * 100, 1) . '%');
-        $html .= html_writer::tag('div', html_writer::tag('strong', get_string('hierarchy_score', 'qtype_syntree', $breakdown['hierarchyweight']) . ':') . ' ' . round($breakdown['hierarchy_score'] * 100, 1) . '%');
+        // Detailed IRLA breakdown.
+        $html .= html_writer::start_tag('div', [
+            'style' => 'font-size: 0.9em; color: #666; margin-bottom: 15px; padding: 10px; ' .
+                'background: #fff; border-radius: 4px; border: 1px inset #eee;',
+        ]);
+        $html .= html_writer::tag(
+            'div',
+            html_writer::tag('strong', get_string('pos_score', 'qtype_syntree', $breakdown['posweight']) . ':') .
+                ' ' . round($breakdown['pos_score'] * 100, 1) . '%'
+        );
+        $html .= html_writer::tag(
+            'div',
+            html_writer::tag('strong', get_string('root_score', 'qtype_syntree', $breakdown['rootweight']) . ':') .
+                ' ' . round($breakdown['root_score'] * 100, 1) . '%'
+        );
+        $html .= html_writer::tag(
+            'div',
+            html_writer::tag('strong', get_string('hierarchy_score', 'qtype_syntree', $breakdown['hierarchyweight']) . ':') .
+                ' ' . round($breakdown['hierarchy_score'] * 100, 1) . '%'
+        );
 
         if (!empty($breakdown['word_debug'])) {
-            $html .= html_writer::start_tag('details', array('style' => 'margin-top: 10px; cursor: pointer;'));
+            $html .= html_writer::start_tag('details', ['style' => 'margin-top: 10px; cursor: pointer;']);
             $html .= html_writer::tag('summary', get_string('paths_comparison', 'qtype_syntree'));
-            $html .= html_writer::start_tag('ul', array('style' => 'list-style: none; padding-left: 10px; font-family: monospace;'));
+            $html .= html_writer::start_tag(
+                'ul',
+                ['style' => 'list-style: none; padding-left: 10px; font-family: monospace;']
+            );
             foreach ($breakdown['word_debug'] as $line) {
-                $html .= html_writer::tag('li', s($line), array('style' => 'border-bottom: 1px dotted #eee; padding: 2px 0;'));
+                $html .= html_writer::tag('li', s($line), ['style' => 'border-bottom: 1px dotted #eee; padding: 2px 0;']);
             }
             $html .= html_writer::end_tag('ul');
             $html .= html_writer::end_tag('details');
         }
         $html .= html_writer::end_tag('div');
 
-        // --- FUNCTIONS SCORE ---
+        // Functions score.
         if ($question->showfunctions) {
-            $func_score = round($breakdown['functions_grade'] * 100, 1);
-            $func_class = ($func_score >= 99) ? 'text-success' : (($func_score > 0) ? 'text-warning' : 'text-danger');
+            $funcscore = round($breakdown['functions_grade'] * 100, 1);
+            $funcclass = ($funcscore >= 99) ? 'text-success' : (($funcscore > 0) ? 'text-warning' : 'text-danger');
 
-            $html .= html_writer::start_tag('div', array('style' => 'margin-bottom:10px;'));
+            $html .= html_writer::start_tag('div', ['style' => 'margin-bottom:10px;']);
             $html .= html_writer::tag('strong', get_string('functions_score', 'qtype_syntree') . ": ");
-            $html .= html_writer::tag('span', $func_score . '%', array('class' => $func_class, 'style' => 'font-weight:bold;'));
+            $html .= html_writer::tag('span', $funcscore . '%', ['class' => $funcclass, 'style' => 'font-weight:bold;']);
             $html .= ' (' . get_string('functions_weight', 'qtype_syntree') . ': ' . $breakdown['functions_weight'] . '%)';
             $html .= html_writer::end_tag('div');
 
-            // Detailed functions table
-            $html .= html_writer::start_tag('table', array('class' => 'generaltable', 'style' => 'width:100%; margin-bottom:0;'));
+            // Detailed functions table.
+            $html .= html_writer::start_tag('table', ['class' => 'generaltable', 'style' => 'width:100%; margin-bottom:0;']);
             $html .= html_writer::start_tag('thead');
             $html .= html_writer::start_tag('tr');
             $html .= html_writer::tag('th', get_string('phrase', 'qtype_syntree'));
@@ -209,8 +243,10 @@ class qtype_syntree_renderer extends qtype_renderer {
             $html .= html_writer::start_tag('tbody');
 
             foreach ($breakdown['functions_details'] as $detail) {
-                $row_class = ($detail['score'] >= 0.99) ? 'table-success' : (($detail['score'] > 0) ? 'table-warning' : 'table-danger');
-                $html .= html_writer::start_tag('tr', array('class' => $row_class));
+                $rowclass = ($detail['score'] >= 0.99)
+                    ? 'table-success'
+                    : (($detail['score'] > 0) ? 'table-warning' : 'table-danger');
+                $html .= html_writer::start_tag('tr', ['class' => $rowclass]);
                 $html .= html_writer::tag('td', s($detail['phrase']));
                 $html .= html_writer::tag('td', s($detail['student']));
                 $html .= html_writer::tag('td', s($detail['expected']));
@@ -225,42 +261,50 @@ class qtype_syntree_renderer extends qtype_renderer {
         return $html;
     }
 
+    /**
+     * Render the read-only reference tree as the correct response.
+     *
+     * @param question_attempt $qa The question attempt being reviewed.
+     * @return string HTML output.
+     */
     public function correct_response(question_attempt $qa) {
-        global $PAGE;
-
         $question = $qa->get_question();
 
-        // Strip alternative labels from correctanswer for display (e.g. [IP|S ...] becomes [IP ...])
-        $display_correctanswer = qtype_syntree_evaluator::strip_alternatives($question->correctanswer);
+        // Strip alternative labels from correctanswer for display (e.g. [IP|S ...] becomes [IP ...]).
+        $displaycorrectanswer = \qtype_syntree\evaluator::strip_alternatives($question->correctanswer);
 
-        $html = html_writer::tag('span', get_string('answer_bracket_notation', 'qtype_syntree') . ': ' . s($display_correctanswer));
+        $html = html_writer::tag(
+            'span',
+            get_string('answer_bracket_notation', 'qtype_syntree') . ': ' . s($displaycorrectanswer)
+        );
 
-        // Ids derived from the attempt, so several questions on one review page never clash
-        $containerId = 'syntree-correct-editor-' . $qa->get_qt_field_name('correct');
-        $hidden_id = 'id_correct_' . $qa->get_qt_field_name('correct');
+        // Ids derived from the attempt, so several questions on one review page never clash.
+        $containerid = 'syntree-correct-editor-' . $qa->get_qt_field_name('correct');
+        $hiddenid = 'id_correct_' . $qa->get_qt_field_name('correct');
 
-        $html .= html_writer::start_tag('div', array(
-            'id' => $containerId,
-            'style' => 'width:100%; min-height:400px; border:1px solid #ccc; margin-top:10px; background:#fafafa; position:relative;'
-        ));
+        $html .= html_writer::start_tag('div', [
+            'id' => $containerid,
+            'style' => 'width:100%; min-height:400px; border:1px solid #ccc; margin-top:10px; ' .
+                'background:#fafafa; position:relative;',
+        ]);
         $html .= html_writer::end_tag('div');
 
-        $html .= html_writer::empty_tag('input', array(
+        $html .= html_writer::empty_tag('input', [
             'type' => 'hidden',
-            'id'   => $hidden_id,
-            'value' => $display_correctanswer
-        ));
+            'id'   => $hiddenid,
+            'value' => $displaycorrectanswer,
+        ]);
 
-        $PAGE->requires->strings_for_js(qtype_syntree::JS_STRINGS, 'qtype_syntree');
-        $PAGE->requires->js_call_amd('qtype_syntree/editor_core', 'init', [[
+        $this->page->requires->strings_for_js(qtype_syntree::JS_STRINGS, 'qtype_syntree');
+        $this->page->requires->js_call_amd('qtype_syntree/editor_core', 'init', [[
             'bundleUrl'   => qtype_syntree::get_bundle_url(),
-            'containerId' => $containerId,
-            'inputId'     => $hidden_id,
+            'containerId' => $containerid,
+            'inputId'     => $hiddenid,
             'mode'        => 'student',
-            'initialData' => $display_correctanswer,
+            'initialData' => $displaycorrectanswer,
             'readonly'    => true,
             'allowtraces' => false,
-            'allowimport' => false // Never allow import in review mode for students
+            'allowimport' => false, // Never allow import in review mode for students.
         ]]);
 
         return $html;

@@ -24,15 +24,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Adds the qtype_syntree_options record of each question to course and question bank backups.
  */
 class backup_qtype_syntree_plugin extends backup_qtype_plugin {
-
     /**
      * Returns the qtype information to attach to the question element.
+     *
+     * @return backup_plugin_element
      */
     protected function define_question_plugin_structure() {
         // Define the virtual plugin element with the condition to fulfill.
@@ -43,12 +42,12 @@ class backup_qtype_syntree_plugin extends backup_qtype_plugin {
         $plugin->add_child($pluginwrapper);
 
         // The element is named after the qtype, which is what the default restore conversion expects.
-        $options = new backup_nested_element('syntree', array('id'), array(
+        $options = new backup_nested_element('syntree', ['id'], [
             'correctanswer', 'allowtraces', 'showfunctions', 'functionslist', 'treeweight',
-            'allowimport', 'posweight', 'rootweight', 'hierarchyweight', 'casesensitive'));
+            'allowimport', 'posweight', 'rootweight', 'hierarchyweight', 'casesensitive']);
         $pluginwrapper->add_child($options);
 
-        $options->set_source_table('qtype_syntree_options', array('questionid' => backup::VAR_PARENTID));
+        $options->set_source_table('qtype_syntree_options', ['questionid' => backup::VAR_PARENTID]);
 
         // No ids to annotate and no files of our own.
         return $plugin;

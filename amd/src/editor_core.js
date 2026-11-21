@@ -22,12 +22,12 @@
  * @copyright  2026 Atanas Atanasov
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'], function($) {
+define(['core/log'], function(Log) {
     return {
         init: function(params) {
             var container = document.getElementById(params.containerId);
             if (!container) {
-                console.error("Syntree container not found", params.containerId);
+                Log.error("Syntree container not found", params.containerId);
                 return;
             }
 
@@ -68,7 +68,7 @@ define(['jquery'], function($) {
                             checks++;
                             if (checks > 50) { // Give up after 5 seconds
                                 clearInterval(checkInterval);
-                                console.error("Syntree script loaded but window.initSyntaxTreeEditor is missing!");
+                                Log.error("Syntree script loaded but window.initSyntaxTreeEditor is missing!");
                                 showMessage(M.util.get_string('loader_error_init_missing', 'qtype_syntree'), true);
                             }
                         }

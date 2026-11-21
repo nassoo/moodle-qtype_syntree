@@ -34,7 +34,6 @@ require_once($CFG->dirroot . '/question/type/questiontypebase.php');
  * The Syntax Tree question type class.
  */
 class qtype_syntree extends question_type {
-
     /**
      * Language string keys passed to JavaScript (AMD loader and bundle UI).
      */
@@ -85,6 +84,8 @@ class qtype_syntree extends question_type {
     /**
      * URL of the editor bundle. The version parameter follows the file's modification time,
      * so browsers cache it but still pick up a new build right away.
+     *
+     * @return string
      */
     public static function get_bundle_url() {
         $file = __DIR__ . '/vue_app/dist/syntree.bundle.js';
@@ -92,24 +93,30 @@ class qtype_syntree extends question_type {
         return (new moodle_url('/question/type/syntree/vue_app/dist/syntree.bundle.js', ['v' => $version]))->out(false);
     }
 
+    /**
+     * Save the type-specific options for a syntax tree question.
+     *
+     * @param stdClass $question Question form data.
+     * @return bool
+     */
     public function save_question_options($question) {
         global $DB;
 
-        // Extract the correct answer bracket notation from the form
-        $bracket_notation = '';
+        // Extract the correct answer bracket notation from the form.
+        $bracketnotation = '';
         if (isset($question->answer_bracket_notation)) {
-            $bracket_notation = trim($question->answer_bracket_notation);
+            $bracketnotation = trim($question->answer_bracket_notation);
         }
 
-        // We only have one correct answer per question for now
-        $options = $DB->get_record('qtype_syntree_options', array('questionid' => $question->id));
+        // We only have one correct answer per question for now.
+        $options = $DB->get_record('qtype_syntree_options', ['questionid' => $question->id]);
         $isnew = !$options;
         if ($isnew) {
             $options = new stdClass();
             $options->questionid = $question->id;
         }
 
-        $options->correctanswer = $bracket_notation;
+        $options->correctanswer = $bracketnotation;
         $options->allowtraces = isset($question->allowtraces) ? $question->allowtraces : 0;
         $options->allowimport = isset($question->allowimport) ? $question->allowimport : 0;
         $options->showfunctions = isset($question->showfunctions) ? $question->showfunctions : 0;
@@ -129,16 +136,29 @@ class qtype_syntree extends question_type {
         return true;
     }
 
+    /**
+     * Load the type-specific options for a syntax tree question.
+     *
+     * @param stdClass $question Question object to populate with options.
+     * @return bool
+     */
     public function get_question_options($question) {
         global $DB;
         parent::get_question_options($question);
-        $options = $DB->get_record('qtype_syntree_options', array('questionid' => $question->id));
+        $options = $DB->get_record('qtype_syntree_options', ['questionid' => $question->id]);
         if ($options) {
             $question->options = $options;
         }
         return true;
     }
 
+    /**
+     * Initialise the runtime question instance from loaded question data.
+     *
+     * @param question_definition $question Target question instance.
+     * @param stdClass $questiondata Loaded question data from the database.
+     * @return void
+     */
     protected function initialise_question_instance(question_definition $question, $questiondata) {
         parent::initialise_question_instance($question, $questiondata);
         // The options record can be missing, e.g. for a question restored from a backup made before backup support existed.
@@ -168,12 +188,27 @@ class qtype_syntree extends question_type {
         }
     }
 
+    /**
+     * Delete the type-specific options for a question.
+     *
+     * @param int $questionid Question ID.
+     * @param int $contextid Context ID.
+     * @return void
+     */
     public function delete_question($questionid, $contextid) {
         global $DB;
-        $DB->delete_records('qtype_syntree_options', array('questionid' => $questionid));
+        $DB->delete_records('qtype_syntree_options', ['questionid' => $questionid]);
         parent::delete_question($questionid, $contextid);
     }
 
+    /**
+     * Export syntax tree options to Moodle XML format.
+     *
+     * @param stdClass $question Question object.
+     * @param qformat_xml $format XML format helper.
+     * @param mixed $extra Extra data (unused).
+     * @return string XML fragment.
+     */
     public function export_to_xml($question, qformat_xml $format, $extra = null) {
         $output = '';
         if (isset($question->options->correctanswer)) {
@@ -211,6 +246,12 @@ class qtype_syntree extends question_type {
 
     /**
      * Reads a text field that Moodle's own export wraps in <text>, while hand-made files may contain the plain value.
+     *
+     * @param array $data Parsed XML data array.
+     * @param qformat_xml $format XML format helper.
+     * @param string $field XML element name.
+     * @param string $default Fallback value if missing.
+     * @return string
      */
     protected function import_text_field($data, qformat_xml $format, $field, $default) {
         $value = $format->getpath($data, ['#', $field, 0, '#', 'text', 0, '#'], null);
@@ -220,6 +261,15 @@ class qtype_syntree extends question_type {
         return is_string($value) ? trim($value) : $default;
     }
 
+    /**
+     * Import a syntax tree question from Moodle XML data.
+     *
+     * @param array $data Parsed XML data array.
+     * @param stdClass|null $question Existing question object or null.
+     * @param qformat_xml $format XML format helper.
+     * @param mixed $extra Extra data (unused).
+     * @return stdClass|false Imported question object, or false if not a syntree question.
+     */
     public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
         if (!isset($data['@']['type']) || $data['@']['type'] != 'syntree') {
             return false;

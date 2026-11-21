@@ -24,26 +24,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Restores the qtype_syntree_options record of each question.
  */
 class restore_qtype_syntree_plugin extends restore_qtype_plugin {
-
     /**
      * Returns the paths to be handled by the plugin at question level.
+     *
+     * @return restore_path_element[]
      */
     protected function define_question_plugin_structure() {
-        return array(
-            new restore_path_element('syntree', $this->get_pathfor('/syntree'))
-        );
+        return [
+            new restore_path_element('syntree', $this->get_pathfor('/syntree')),
+        ];
     }
 
     /**
      * Process the qtype/syntree element.
      *
      * @param array $data
+     * @return void
      */
     public function process_syntree($data) {
         global $DB;
@@ -56,7 +56,7 @@ class restore_qtype_syntree_plugin extends restore_qtype_plugin {
         if ($questioncreated) {
             $data->questionid = $this->get_new_parentid('question');
             if (!isset($data->casesensitive)) {
-                $data->casesensitive = 0; // Backups made before the option existed
+                $data->casesensitive = 0; // Backups made before the option existed.
             }
             $newitemid = $DB->insert_record('qtype_syntree_options', $data);
             $this->set_mapping('qtype_syntree_options', $oldid, $newitemid);

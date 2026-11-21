@@ -1,0 +1,7 @@
+# LF line endings in the repository, in checkouts and in archives (git archive, release ZIPs),
+# whatever core.autocrlf says. Moodle's ESLint (grunt) rejects CRLF in amd/src.
+* text=auto eol=lf
+
+# Generated files: no line diffs in reviews.
+amd/build/** -diff
+vue_app/dist/** -diff
